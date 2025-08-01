@@ -56,9 +56,18 @@ jobs:
           echo "REPO_NAME=$(terraform output -raw repository_name)" >> $GITHUB_ENV
           echo "REPO_DESCRIPTION=$(terraform output -raw repository_description)" >> $GITHUB_ENV
 
+      - name: Output repository details
+        id: output_repo_details
+        run: |
+          # Retrieve and set outputs for repository details to be used by next jobs
+          REPO_NAME=$(terraform output -raw repository_name)
+          REPO_DESCRIPTION=$(terraform output -raw repository_description)
+          echo "repo_name=$REPO_NAME" >> $GITHUB_ENV
+          echo "repo_description=$REPO_DESCRIPTION" >> $GITHUB_ENV
+
     outputs:
-      repo_name: ${{ steps.output_repo_details.outputs.REPO_NAME }}
-      repo_description: ${{ steps.output_repo_details.outputs.REPO_DESCRIPTION }}
+      repo_name: ${{ steps.output_repo_details.outputs.repo_name }}
+      repo_description: ${{ steps.output_repo_details.outputs.repo_description }}
       
   add-readme:
     needs: terraform  # This job will only run after the Terraform job
@@ -69,7 +78,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up GitHub Token for Authentication
-        run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+        run: echo "GITHUB_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV
 
       - name: Generate README content using Groq
         id: generate_readme
