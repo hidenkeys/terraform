@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main  # Trigger when changes are pushed to the 'main' branch
-    workflow_dispatch:  # Optional: for manual testing
+  workflow_dispatch:  # Optional: for manual testing
 
 jobs:
   terraform:
@@ -34,18 +34,18 @@ jobs:
             ${{ runner.os }}-terraform-
 
       - name: Set up GitHub token as environment variable
-        run: echo "GITHUB_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV  # Make sure the token is accessible
+        run: echo "TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV  # Use your custom token stored as 'TOKEN'
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform  # Add this line to specify the correct directory
+        working-directory: terraform  # Specify the directory containing the .tf files
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-        working-directory: terraform  # Add this line to specify the correct directory
+        working-directory: terraform  # Specify the directory containing the .tf files
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-        working-directory: terraform  # Add this line to specify the correct directory
+        working-directory: terraform  # Specify the directory containing the .tf files
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Pass the GitHub token to the Terraform provider
+          TOKEN: ${{ secrets.TOKEN }}  # Pass your custom PAT to the provider
