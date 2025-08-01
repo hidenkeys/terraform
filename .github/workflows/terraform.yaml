@@ -50,10 +50,18 @@ jobs:
         env:
           TF_VAR_TOKEN: ${{ secrets.TOKEN }}  # Pass your custom PAT to the environment variable
 
+      - name: Terraform Refresh
+        run: terraform refresh
+        working-directory: terraform  # Ensure to specify the correct directory if needed
+
+      - name: Debug Terraform State
+        run: terraform state list
+        working-directory: terraform  # Print out the resources in the Terraform state to check if the repo is created
+
       - name: Output repository details
         id: output_repo_details
         run: |
-          # Retrieve the repository details from Terraform output
+          # Retrieve the repository details from Terraform output after refreshing the state
           REPO_NAME=$(terraform output -raw repository_name)
           REPO_DESCRIPTION=$(terraform output -raw repository_description)
           
@@ -64,13 +72,6 @@ jobs:
           # Set environment variables using the correct format for GitHub Actions
           echo "repo_name=$REPO_NAME" >> $GITHUB_ENV
           echo "repo_description=$REPO_DESCRIPTION" >> $GITHUB_ENV
-          
-      - name: Debug Terraform Output
-        run: |
-          echo "Repository Name: ${{ env.repo_name }}"
-          echo "Repository Description: ${{ env.repo_description }}"
-
-
 
   add-readme:
     needs: terraform  # This job will only run after the Terraform job
