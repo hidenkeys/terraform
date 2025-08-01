@@ -18,15 +18,17 @@ jobs:
 
     # Install Terraform providers
     - name: Terraform Init
+      working-directory: ./terraform  # Specify the directory where your Terraform configuration is
       run: terraform init
 
     # Validate the Terraform configuration
     - name: Terraform Validate
+      working-directory: ./terraform  # Specify the directory where your Terraform configuration is
       run: terraform validate
 
     # Apply the Terraform script
     - name: Terraform Apply
+      working-directory: ./terraform  # Specify the directory where your Terraform configuration is
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Use the correct GitHub Token from Secrets
       run: terraform apply -auto-approve
-
