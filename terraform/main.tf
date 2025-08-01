@@ -18,7 +18,7 @@ provider "github" {
 }
 
 # GitHub Repository Resource
-resource "github_repository" "example" {
+resource "github_repository" "example4" {
   name        = "example-repository-v4"
   description = "A new repository created via Terraform and GitHub Actions"
   visibility  = "public"
