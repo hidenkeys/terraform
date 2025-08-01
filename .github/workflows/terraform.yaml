@@ -1,9 +1,7 @@
 name: Terraform GitHub Actions Workflow
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # Optional: for manual testing
 
 jobs:
   terraform:
