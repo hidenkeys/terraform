@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-terraform-
 
       - name: Set up GitHub token as environment variable
-        run: echo "TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV  # Use your custom token stored as 'TOKEN'
+        run: echo "TF_VAR_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV  # Set TF_VAR_TOKEN from GitHub Secrets
 
       - name: Terraform Init
         run: terraform init
@@ -48,4 +48,4 @@ jobs:
         run: terraform apply -auto-approve tfplan
         working-directory: terraform  # Specify the directory containing the .tf files
         env:
-          TOKEN: ${{ secrets.TOKEN }}  # Pass your custom PAT to the provider
+          TF_VAR_TOKEN: ${{ secrets.TOKEN }}  # Pass your custom PAT to the environment variable
