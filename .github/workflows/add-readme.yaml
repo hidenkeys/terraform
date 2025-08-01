@@ -2,9 +2,7 @@ name: Add README to Repository using Groq
 
 on:
   workflow_run:
-    workflows: ["Terraform Workflow"]  # Trigger this after the Terraform workflow
-    types:
-      - completed
+   
 
 jobs:
   add-readme:
