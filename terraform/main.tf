@@ -17,9 +17,9 @@ provider "github" {
   token = var.TOKEN  # Use the token from the environment variable
 }
 
-# GitHub Repository Resource
+# Creating a GitHub repository with a unique name using a timestamp
 resource "github_repository" "example4" {
-  name        = "example-repository-v4"
+  name        = "example-repository-v4-${timestamp()}"  # Add a timestamp to ensure uniqueness
   description = "A new repository created via Terraform and GitHub Actions"
   visibility  = "public"
 }
