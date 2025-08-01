@@ -19,7 +19,7 @@ provider "github" {
 
 # GitHub Repository Resource
 resource "github_repository" "example" {
-  name        = "example-repository-v2"
+  name        = "example-repository-v4"
   description = "A new repository created via Terraform and GitHub Actions"
   visibility  = "public"
 }
