@@ -57,14 +57,18 @@ jobs:
           REPO_NAME=$(terraform output -raw repository_name)
           REPO_DESCRIPTION=$(terraform output -raw repository_description)
           
-          # Set environment variables using the correct format
-          echo "repo_name=$REPO_NAME" >> $GITHUB_ENV
-          echo "repo_description=$REPO_DESCRIPTION" >> $GITHUB_ENV
-            - name: Debug Terraform Output
-      - name: check output details
-        run: |
+          # Debug the Terraform output to ensure the values are retrieved correctly
           echo "Repository Name: $REPO_NAME"
           echo "Repository Description: $REPO_DESCRIPTION"
+
+          # Set environment variables using the correct format for GitHub Actions
+          echo "repo_name=$REPO_NAME" >> $GITHUB_ENV
+          echo "repo_description=$REPO_DESCRIPTION" >> $GITHUB_ENV
+          
+      - name: Debug Terraform Output
+        run: |
+          echo "Repository Name: ${{ env.repo_name }}"
+          echo "Repository Description: ${{ env.repo_description }}"
 
 
 
