@@ -1,0 +1,34 @@
+name: Terraform GitHub Actions Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Set up Terraform
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    # Install Terraform providers
+    - name: Terraform Init
+      run: terraform init
+
+    # Validate the Terraform configuration
+    - name: Terraform Validate
+      run: terraform validate
+
+    # Apply the Terraform script
+    - name: Terraform Apply
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: terraform apply -auto-approve
+
