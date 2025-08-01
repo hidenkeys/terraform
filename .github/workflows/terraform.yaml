@@ -49,17 +49,11 @@ jobs:
         working-directory: terraform  # Specify the directory containing the .tf files
         env:
           TF_VAR_TOKEN: ${{ secrets.TOKEN }}  # Pass your custom PAT to the environment variable
-      - name: Output repository details
-        id: output_repo_details
-        run: |
-          # Output the repository's name and description from Terraform
-          echo "REPO_NAME=$(terraform output -raw repository_name)" >> $GITHUB_ENV
-          echo "REPO_DESCRIPTION=$(terraform output -raw repository_description)" >> $GITHUB_ENV
 
       - name: Output repository details
         id: output_repo_details
         run: |
-          # Retrieve and set outputs for repository details to be used by next jobs
+          # Output the repository's name and description from Terraform
           REPO_NAME=$(terraform output -raw repository_name)
           REPO_DESCRIPTION=$(terraform output -raw repository_description)
           echo "repo_name=$REPO_NAME" >> $GITHUB_ENV
@@ -68,7 +62,7 @@ jobs:
     outputs:
       repo_name: ${{ steps.output_repo_details.outputs.repo_name }}
       repo_description: ${{ steps.output_repo_details.outputs.repo_description }}
-      
+
   add-readme:
     needs: terraform  # This job will only run after the Terraform job
     runs-on: ubuntu-latest
@@ -85,7 +79,7 @@ jobs:
         run: |
           # Generate the prompt dynamically based on repository name and description
           curl -X POST https://api.groq.com/openai/v1/chat/completions \
-          -H "Authorization: Bearer ${{ secrets.GROQ_API_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.GROQ }}" \
           -H "Content-Type: application/json" \
           -d '{
                 "model": "llama-3.3-70b-versatile",
