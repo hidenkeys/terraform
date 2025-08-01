@@ -27,16 +27,16 @@ resource "github_repository" "example4" {
 # Output the URL of the created GitHub repository
 output "repository_url" {
   description = "The URL of the created repository"
-  value       = github_repository.example.html_url
+  value       = github_repository.example4.html_url
 }
 
 # Output the repository's name and description
 output "repository_name" {
   description = "The name of the created repository"
-  value       = github_repository.example.name
+  value       = github_repository.example4.name
 }
 
 output "repository_description" {
   description = "The description of the created repository"
-  value       = github_repository.example.description
+  value       = github_repository.example4.description
 }
