@@ -1,34 +1,48 @@
-name: Terraform GitHub Actions Workflow
+name: Terraform Workflow
 
 on:
-  workflow_dispatch:  # Optional: for manual testing
+  push:
+    branches:
+      - main  # Trigger when changes are pushed to the 'main' branch
+    workflow_dispatch:  # Optional: for manual testing
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code from the repository
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Set up Terraform
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.4.5'  # Specify the version of Terraform
 
-    # Install Terraform providers
-    - name: Terraform Init
-      working-directory: ./terraform  # Specify the directory where your Terraform configuration is
-      run: terraform init
+      - name: Terraform Format Check
+        run: terraform fmt -check  # Ensure that the Terraform code is formatted properly
 
-    # Validate the Terraform configuration
-    - name: Terraform Validate
-      working-directory: ./terraform  # Specify the directory where your Terraform configuration is
-      run: terraform validate
+      - name: Terraform Validate
+        run: terraform validate  # Validate the Terraform configuration
 
-    # Apply the Terraform script
-    - name: Terraform Apply
-      working-directory: ./terraform  # Specify the directory where your Terraform configuration is
-      env:
-        TOKEN: ${{ secrets.TOKEN }}  # Pass GitHub Token from Secrets
-      run: terraform apply -auto-approve -debug
+      - name: Cache Terraform providers
+        uses: actions/cache@v3
+        with:
+          path: ~/.terraform.d/plugin-cache
+          key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
+          restore-keys: |
+            ${{ runner.os }}-terraform-
+
+      - name: Set up GitHub token as environment variable
+        run: echo "GITHUB_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV  # Make sure the token is accessible
+
+      - name: Terraform Init
+        run: terraform init  # Initialize Terraform working directory
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan  # Generate the execution plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan  # Apply the plan automatically
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Pass the GitHub token to the Terraform provider
