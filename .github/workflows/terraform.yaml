@@ -31,4 +31,4 @@ jobs:
       working-directory: ./terraform  # Specify the directory where your Terraform configuration is
       env:
         TOKEN: ${{ secrets.TOKEN }}  # Pass GitHub Token from Secrets
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -debug
