@@ -53,13 +53,19 @@ jobs:
       - name: Output repository details
         id: output_repo_details
         run: |
-          # Retrieve and set outputs for repository details to be used by next jobs
+          # Retrieve the repository details from Terraform output
           REPO_NAME=$(terraform output -raw repository_name)
           REPO_DESCRIPTION=$(terraform output -raw repository_description)
           
-          # Correctly set env variables
+          # Set environment variables using the correct format
           echo "repo_name=$REPO_NAME" >> $GITHUB_ENV
           echo "repo_description=$REPO_DESCRIPTION" >> $GITHUB_ENV
+            - name: Debug Terraform Output
+      - name: check output details
+        run: |
+          echo "Repository Name: $REPO_NAME"
+          echo "Repository Description: $REPO_DESCRIPTION"
+
 
 
   add-readme:
