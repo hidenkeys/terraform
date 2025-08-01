@@ -19,7 +19,7 @@ provider "github" {
 
 # Creating a GitHub repository with a unique name using a timestamp
 resource "github_repository" "example4" {
-  name        = "example-repository-v4-${timestamp()}"  # Add a timestamp to ensure uniqueness
+  name        = "example-repository-v4-xxx"  # Add a timestamp to ensure uniqueness
   description = "A new repository created via Terraform and GitHub Actions"
   visibility  = "public"
 }
