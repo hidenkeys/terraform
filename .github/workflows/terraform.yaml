@@ -37,12 +37,15 @@ jobs:
         run: echo "GITHUB_TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV  # Make sure the token is accessible
 
       - name: Terraform Init
-        run: terraform init  # Initialize Terraform working directory
+        run: terraform init
+        working-directory: terraform  # Add this line to specify the correct directory
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan  # Generate the execution plan
+        run: terraform plan -out=tfplan
+        working-directory: terraform  # Add this line to specify the correct directory
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan  # Apply the plan automatically
+        run: terraform apply -auto-approve tfplan
+        working-directory: terraform  # Add this line to specify the correct directory
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Pass the GitHub token to the Terraform provider
