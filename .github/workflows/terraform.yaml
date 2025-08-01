@@ -53,15 +53,14 @@ jobs:
       - name: Output repository details
         id: output_repo_details
         run: |
-          # Output the repository's name and description from Terraform
+          # Retrieve and set outputs for repository details to be used by next jobs
           REPO_NAME=$(terraform output -raw repository_name)
           REPO_DESCRIPTION=$(terraform output -raw repository_description)
+          
+          # Correctly set env variables
           echo "repo_name=$REPO_NAME" >> $GITHUB_ENV
           echo "repo_description=$REPO_DESCRIPTION" >> $GITHUB_ENV
 
-    outputs:
-      repo_name: ${{ steps.output_repo_details.outputs.repo_name }}
-      repo_description: ${{ steps.output_repo_details.outputs.repo_description }}
 
   add-readme:
     needs: terraform  # This job will only run after the Terraform job
